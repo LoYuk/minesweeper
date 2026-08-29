@@ -11,7 +11,7 @@ typedef struct{
 } minesweeper_cell;
 
 
-int init_minesweeper_map(minesweeper_cell**, int, int);
+void init_minesweeper_map(minesweeper_cell**, int, int);
 bool check_valid_cell_selection(minesweeper_cell**, int, int, int, int);
 void print_minesweeper_map(minesweeper_cell**, int, int);
 bool is_game_out_of_move(minesweeper_cell**, int, int);
@@ -23,7 +23,7 @@ int main(void) {
   srand(time(NULL));
   int row, column;
   int selected_row, selected_column;
-  printf("Enter row (>2) and column (>2) for the minesweeper map.\n");
+  printf("Enter row (>2) and column (>2) for the minesweeper map. Example. 3 3\n");
   scanf("%d %d", &row, &column);
   if (row <= 2 || column <= 2) {
     printf("invalid row or column. Exit.\n");
@@ -56,7 +56,7 @@ int main(void) {
     bool user_selected = false;
     int break_count = 0;
     while (!user_selected && break_count <= 10) {
-      printf("Enter the first cell you want to choose\n");
+      printf("Enter the first cell you want to choose. E.g. 0 0\n");
       scanf("%d %d", &selected_row, &selected_column);
       user_selected = check_valid_cell_selection(map, row, column, selected_row, selected_column);
       if (!user_selected) {
@@ -95,17 +95,13 @@ int main(void) {
   return 0;
 }
 
-// init mines with r - 2, c - 2
-int init_minesweeper_map(minesweeper_cell** map, int r, int c) {
-  int max_mine_count = (r - 2) * (c - 2);
-  printf("maximum mine count is %d\n", max_mine_count);
-
+// hardcode init mines with r - 2, c - 2
+void init_minesweeper_map(minesweeper_cell** map, int r, int c) {
   for (int i = 0; i < r - 2; ++i) {
     for (int j = 0; j < c - 2; ++j) {
         map[rand() % r][rand() % c].has_mine = true;
     }
   }
-  return 0;
 }
 
 void print_minesweeper_map(minesweeper_cell** map, int r, int c) {
@@ -147,12 +143,9 @@ bool is_game_out_of_move(minesweeper_cell** map, int r, int c) {
 }
 
 int calculate_adj_mine_count(minesweeper_cell** map, int r, int c, int selected_row, int selected_column) {
-  if (r <= 2 || c <= 2) {
-    printf("invalid row or column entered. Exit..\n");
-    return 1;
-  }
- 
   int sum = 0;
+
+  // Handle non corners
   if (selected_row > 0) {
     sum += map[selected_row - 1][selected_column].has_mine? 1:0;    
   }
