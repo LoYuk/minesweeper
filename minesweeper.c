@@ -54,8 +54,9 @@ int main(void) {
   while (!hit_mine && !is_game_out_of_move(map, row, column)) {
     print_minesweeper_map(map, row, column);
     bool user_selected = false;
-    int break_count = 0;
+    int break_count;
     while (!user_selected && break_count <= 10) {
+      break_count = 0;
       printf("Enter the first cell you want to choose. E.g. 0 0\n");
       scanf("%d %d", &selected_row, &selected_column);
       user_selected = check_valid_cell_selection(map, row, column, selected_row, selected_column);
